@@ -26,5 +26,10 @@ if exists("&undodir")
 endif
 
 set noerrorbells
-set ruler
-set title
+set noruler
+set laststatus=2
+set statusline=%.40f
+set statusline+=%=
+set statusline+=%l
+set statusline+=/
+set statusline+=%L

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+alias ls='ls --color'
+alias ll='ls -al'
+
+alias path='echo -e ${PATH//:/\\n}'
+
+alias ..='cd ..'
+

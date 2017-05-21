@@ -33,3 +33,5 @@ set statusline+=%=
 set statusline+=%l
 set statusline+=/
 set statusline+=%L
+
+set tags=./tags;

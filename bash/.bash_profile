@@ -8,3 +8,5 @@ unset file;
 shopt -s nocaseglob
 
 PROMPT_DIRTRIM=2
+PATH=$PATH:$HOME/bin
+PATH=$PATH:$HOME/go/bin

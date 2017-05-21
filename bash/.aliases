@@ -7,3 +7,5 @@ alias path='echo -e ${PATH//:/\\n}'
 
 alias ..='cd ..'
 
+alias tmls='tmux list-session'
+alias tma='tmux attach -t'

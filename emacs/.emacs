@@ -13,7 +13,7 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
+;;(require 'diminish)
 (require 'bind-key)
 
 (add-hook 'text-mode-hook 'linum-mode )
@@ -24,14 +24,17 @@
 	     (evil-mode 1)
 	     )
 
+(use-package ob-go
+  :ensure t )
+
 ;; Solarized
 ;; https://github.com/sellout/emacs-color-theme-solarized/pull/187
-(setq color-themes '())
-(use-package color-theme-solarized
-  :ensure t
-  :config
-  (customize-set-variable 'frame-background-mode 'dark)
-  (load-theme 'solarized t))
+;;(setq color-themes '())
+;;(use-package color-theme-solarized
+;;  :ensure t
+;;  :config
+;;  (customize-set-variable 'frame-background-mode 'dark)
+;;  (load-theme 'solarized t))
 
 ;; Powerline
 (use-package powerline
@@ -72,8 +75,11 @@
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t)
+   (C . t)
    (ditaa . t)
-   (sh . t)))
+   (sh . t)
+   (plantuml . t)
+   (go . t)))
 
 (use-package smooth-scrolling
   :ensure t
@@ -81,6 +87,30 @@
   (smooth-scrolling-mode 1)
   (setq smooth-scroll-margin 5))
 
+
+(use-package go-mode
+    :ensure t)
+
+(load-theme 'wombat t)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+
+(set-default-font "Mono-12")
+
+(global-hl-line-mode +1)
+(show-paren-mode 1)
+
+(setq evil-move-cursor-back nil)
+
+(setq org-plantuml-jar-path "~/base/plantuml.jar" )
+
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+  backup-by-copying t
+  version-control t
+  delete-old-versions t
+  kept-new-versions 20
+  kept-old-versions 10
+  )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -90,7 +120,7 @@
  '(frame-background-mode (quote dark))
  '(package-selected-packages
    (quote
-    (smart-mode-line-powerline-theme powerline use-package evil))))
+    (ob-go smart-mode-line-powerline-theme powerline use-package evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

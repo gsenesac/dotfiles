@@ -10,6 +10,7 @@ shopt -s nocaseglob
 PROMPT_DIRTRIM=2
 PATH=$PATH:$HOME/bin
 PATH=$PATH:$HOME/go/bin
+PATH=$PATH:/usr/local/go/bin
 PROXYFILE=$HOME/.bash/proxy
 APTGET_CONF=/etc/apt/apt.conf
 

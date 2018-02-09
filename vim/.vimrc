@@ -8,8 +8,12 @@ inoremap Jk <Esc>
 inoremap JK <Esc>
 
 set number
+set relativenumber
+
 syntax on
 set cursorline
+
+set complete+=kspell
 
 set tabstop=4
 set shiftwidth=4

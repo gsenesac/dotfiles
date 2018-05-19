@@ -1,8 +1,8 @@
 (require 'package)
 
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/" ) )
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/" ) )
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/" ) )
-(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/" ) )
 
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -18,14 +18,74 @@
 
 (add-hook 'text-mode-hook 'linum-mode )
 
+(setq visible-bell t)
+(setq vc-follow-symlinks t)
+
 (use-package evil
 	     :ensure t
 	     :config
 	     (evil-mode 1)
 	     )
 
+(use-package ag
+  :ensure t
+  :commands (ag ag-regexp ag-project))
+
 (use-package ob-go
   :ensure t )
+
+(use-package magit
+  :ensure t
+  :defer t
+  :config
+  (setq magit-branch-arguments nil)
+  (setq magit-push-always-verify nil)
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (magit-define-popup-switch 'magit-log-popup ?f "first parent" "--first-parent"))
+
+;;; Git Commit Mode (a Magit minor mode):
+(add-hook 'git-commit-mode-hook 'evil-insert-state)
+
+;;;;; Emacs Lisp mode:
+;;(add-hook 'emacs-lisp-mode-hook
+;;          (lambda ()
+;;            (yas-minor-mode t)
+;;            (eldoc-mode)
+;;            (highlight-symbol-mode)
+;;            (define-key emacs-lisp-mode-map (kbd "<C-return>") 'eval-last-sexp)))
+;;
+;;;;; SH mode:
+;;(add-hook 'sh-mode-hook (lambda ()
+;;                          (setq sh-basic-offset 2)
+;;                          (setq sh-indentation 2)))
+
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :config
+  (yas-reload-all)
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"
+                           "~/.emacs.d/remote-snippets"))
+  (setq tab-always-indent 'complete)
+  (setq yas-prompt-functions '(yas-completing-prompt
+                               yas-ido-prompt
+                               yas-dropdown-prompt))
+  (define-key yas-minor-mode-map (kbd "<escape>") 'yas-exit-snippet))
+
+(use-package yasnippet-snippets
+  :ensure t )
+
+
+(use-package flycheck
+  :ensure t
+  :commands flycheck-mode)
+
+(use-package helm-make
+  :ensure t
+  :config
+  (global-set-key (kbd "C-c m") 'helm-make-projectile))
+
+
 
 ;; Solarized
 ;; https://github.com/sellout/emacs-color-theme-solarized/pull/187
@@ -60,6 +120,29 @@
   (helm-mode 1)
 )
 
+(use-package helm-ag
+  :ensure helm-ag
+  :bind ("M-p" . helm-projectile-ag)
+  )
+;;  :commands (helm-ag helm-projectile-ag)
+;;  :init (setq helm-ag-insert-at-point 'symbol
+;;	      helm-ag-command-option "--path-to-ignore ~/.agignore"))
+
+(use-package projectile
+  :ensure t
+  :defer t
+  :config
+  (projectile-global-mode)
+  (setq projectile-enable-caching t))
+
+(use-package helm-projectile
+  :ensure t
+  :bind ( ("M-t" . helm-projectile-find-file)
+          :map evil-normal-state-map
+          ("C-p" . helm-projectile) )
+  :config
+  (helm-projectile-on))
+
 (use-package key-chord
   :ensure t
   :config
@@ -71,6 +154,14 @@
 
 
 (global-set-key (kbd "M-x") 'helm-M-x)
+
+(use-package ox-twbs
+             :ensure t )
+
+(eval-after-load "org"
+  '(require 'ox-md nil t))
+(eval-after-load "org"
+  '(require 'ox-twbs nil t))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -112,6 +203,19 @@
   kept-old-versions 10
   )
 
+(setq projectile-tags-command "ctags-exuberant -Re %s %s .")
+
+(if (functionp 'display-line-numbers-mode)
+    (and (add-hook 'display-line-numbers-mode-hook
+                   (lambda () (setq display-line-numbers-type 'relative)))
+         (add-hook 'prog-mode-hook #'display-line-numbers-mode))
+  (use-package nlinum-relative
+    :ensure t
+    :config
+    (nlinum-relative-setup-evil)
+    (setq nlinum-relative-redisplay-delay 0)
+    (add-hook 'prog-mode-hook 'nlinum-relative-mode)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -120,7 +224,7 @@
  '(frame-background-mode (quote dark))
  '(package-selected-packages
    (quote
-    (ob-go smart-mode-line-powerline-theme powerline use-package evil))))
+    (helm-projectile projectile ag ob-go smart-mode-line-powerline-theme powerline use-package evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
